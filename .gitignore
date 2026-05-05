@@ -58,11 +58,10 @@ CodeCoverage/
 # Docker
 *.dockerignore
 .dockerignore
-Dockerfile
-docker-compose.yml
+
 
 # Kubernetes (DO NOT track deployment manifests)
-k8s/
+k8s/secret.yml
 
 # JavaScript / Node projects (if separate frontend folder exists)
 js/

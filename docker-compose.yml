@@ -1,0 +1,60 @@
+x-common-env: &common-env
+  ASPNETCORE_ENVIRONMENT: Development
+  ConnectionStrings__DefaultConnection: Server=${DB_HOST};Database=${DB_NAME};User Id=${DB_USERNAME};Password=${DB_PASSWORD};TrustServerCertificate=True;
+  Redis__ConnectionString: ${REDIS_HOST}
+  SecretKeys__Jwt__key: ${JWT_KEY}
+  SecretKeys__Jwt__ExpiryHours: ${JWT_EXPIRY_HOURS}
+  SecretKeys__Jwt__ExpiryMinutes: ${JWT_EXPIRY_MINUTES}
+  GoogleOAuth__ClientId: ${GOOGLE_CLIENT_ID}
+  GoogleOAuth__ClientSecret: ${GOOGLE_CLIENT_SECRET}
+  FileStorage__BasePath: ${FILE_STORAGE_PATH}
+  EmailSettings__Host: ${EMAIL_HOST}
+  EmailSettings__Port: ${EMAIL_PORT}
+  EmailSettings__Username: ${EMAIL_USERNAME}
+  EmailSettings__Password: ${EMAIL_PASSWORD}
+  StartUpRole__Admin: ${ROLE_NAME_ADMIN}
+  StartUpRole__User: ${ROLE_NAME_USER}
+
+services:
+ 
+  api:
+    build:
+      context: .
+    ports:
+      - "8080"
+    depends_on:
+      sql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      <<: *common-env
+    volumes:
+      - D:/AppStorage:/app/storage
+
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql_server
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "14330:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$DB_PASSWORD\" -C -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  redis:
+    image: redis:7
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
