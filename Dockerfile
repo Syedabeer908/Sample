@@ -1,17 +1,15 @@
-# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy csproj and restore
+# copy solution first (better cache)
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copy everything and publish
+# copy rest
 COPY . .
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
-# Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
 COPY --from=build /app/publish .

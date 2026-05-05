@@ -19,7 +19,7 @@ jobs:
         run: dotnet test
 
       - name: Build Docker image
-        run: docker build -t my-api:latest .
+        run: docker build -t sample-api:latest .s
 
       - name: Deploy to Kubernetes
         run: kubectl rollout restart deployment api -n sample
