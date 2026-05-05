@@ -2,7 +2,7 @@ name: Local Full CI/CD
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   build-deploy:
