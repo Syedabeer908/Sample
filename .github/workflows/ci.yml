@@ -1,0 +1,25 @@
+name: Local Full CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build .NET app
+        run: dotnet build
+
+      - name: Run tests
+        run: dotnet test
+
+      - name: Build Docker image
+        run: docker build -t my-api:latest .
+
+      - name: Deploy to Kubernetes
+        run: kubectl rollout restart deployment api -n sample
