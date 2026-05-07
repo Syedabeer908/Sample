@@ -21,7 +21,20 @@ jobs:
       - name: Build Docker image
         run: docker build -t sample-api:latest .
 
-      # 1. Deploy / update app
+      # Create namespace if missing
+      - name: Ensure namespace exists
+        run: |
+          kubectl create namespace sample --dry-run=client -o yaml | kubectl apply -f -
+
+      # Recreate secret.yml from GitHub Secret
+      - name: Generate Kubernetes Secret File
+        shell: powershell
+        run: |
+          @"
+          ${{ secrets.K8S_SECRET_YAML }}
+          "@ | Out-File -FilePath k8s/secret.yml -Encoding utf8
+
+      # Deploy all manifests using kustomize
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -k k8s
