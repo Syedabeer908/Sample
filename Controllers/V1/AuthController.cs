@@ -47,14 +47,14 @@ namespace WebApplication1.Controllers.V1
             return Ok(_resultHelper.Success<AuthResponseDto>(authResponse));
         }
 
-        //[HttpGet("whoami")]
-        //public IActionResult WhoAmI()
-        //{
-        //    return Ok(new
-        //    {
-        //        pod = Environment.MachineName,
-        //        time = DateTime.UtcNow
-        //    });
-        //}
+        [HttpGet("whoami")]
+        public IActionResult WhoAmI()
+        {
+            return Ok(new
+            {
+                pod = Environment.MachineName,
+                time = DateTime.UtcNow
+            });
+        }
     }
 }
