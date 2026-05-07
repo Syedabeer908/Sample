@@ -1,4 +1,5 @@
-﻿using WebApplication1.Infrastructure.Hangfire;
+﻿using WebApplication1.Common.Sanitizer;
+using WebApplication1.Infrastructure.Hangfire;
 using WebApplication1.Jobs;
 using WebApplication1.Services;
 
@@ -28,7 +29,7 @@ namespace WebApplication1.Extensions
             services.AddScoped<AuthBackgroundJobs>();
 
             services.AddSingleton<HangfireAuthorizationFilter>();
-
+            services.AddSingleton<HtmlSanitizer>();
             return services;
         }
     }

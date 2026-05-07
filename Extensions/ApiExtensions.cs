@@ -83,8 +83,23 @@ namespace WebApplication1.Extensions
             {
                 options.AddFixedWindowLimiter("fixed", opt =>
                 {
-                    opt.PermitLimit = 100;
+                    opt.PermitLimit = 10;
                     opt.Window = TimeSpan.FromMinutes(1);
+                    opt.QueueLimit = 2;
+                });
+            });
+            return services;
+        }
+
+        public static IServiceCollection AddCorsServices(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy.WithOrigins("https://localhost:7163")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
                 });
             });
             return services;

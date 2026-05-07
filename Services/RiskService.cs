@@ -1,5 +1,6 @@
 ﻿using WebApplication1.Common.Exceptions;
 using WebApplication1.Common.Results;
+using WebApplication1.Common.Validators;
 using WebApplication1.Data;
 using WebApplication1.DTOs.Risk;
 using WebApplication1.Entities;
@@ -52,6 +53,10 @@ namespace WebApplication1.Services
 
         public async Task<ResultT<RiskDto>> AddAsync(Guid userId, CreateRiskDto dto)
         {
+            if (InputValidators.IsUnsafeForPlainText(dto.RiskTitle) || 
+                InputValidators.IsUnsafeForPlainText(dto.RiskDescription))
+                throw new BadRequestException("HTML is not allowed in in this field");
+
             var risk = _mapper.ToEntity(userId, dto);
             await _repo.AddAsync(risk);
 

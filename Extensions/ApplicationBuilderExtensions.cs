@@ -15,13 +15,18 @@ namespace WebApplication1.Extensions
                 app.UseSwaggerWithVersioning();
             }
 
-            app.UseMiddleware<ExceptionMiddleware>();
-
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
 
+            app.UseMiddleware<SecurityHeadersMiddleware>();
+
+            app.UseMiddleware<IpRateLimitingMiddleware>();
             app.UseRateLimiter();
+
+            app.UseCors("AllowFrontend");
 
             app.UseAuthentication();
             app.UseAuthorization();

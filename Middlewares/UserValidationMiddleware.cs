@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using Serilog;
+using System.Security.Claims;
 using System.Text.Json;
 using WebApplication1.Common.Responses;
 using WebApplication1.Common.Results;
@@ -87,6 +88,11 @@ namespace WebApplication1.Middlewares
                 await UnauthorizedResponse(context, "Token has been invalidated. Please login again.");
                 return;
             }
+
+            Log.Information("Request: {Method} {Path} by {userId}",
+                context.Request.Method,
+                context.Request.Path,
+                userId);
 
             context.Items["UserId"] = userId;
             await _next(context);

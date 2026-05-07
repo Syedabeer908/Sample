@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Common.Exceptions;
 using WebApplication1.Common.Extensions;
@@ -26,6 +27,7 @@ namespace WebApplication1.Controllers.V1
             _resultHelper = new ResultHelper();
         }
 
+        [EnableRateLimiting("fixed")]
         [HttpGet("get-image")]
         public async Task<IActionResult> GetProfileImageAsync()
         {
