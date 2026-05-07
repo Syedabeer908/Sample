@@ -38,4 +38,5 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -k k8s
+          kubectl rollout restart deployment/api -n sample
           kubectl rollout status deployment/api -n sample

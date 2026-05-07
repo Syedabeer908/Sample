@@ -16,6 +16,7 @@ spec:
       containers:
       - name: api
         image: sample-api:latest
+        imagePullPolicy: Always
         ports:
           - containerPort: 8080
 
