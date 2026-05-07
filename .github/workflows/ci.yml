@@ -21,5 +21,14 @@ jobs:
       - name: Build Docker image
         run: docker build -t sample-api:latest .
 
+      # 1. Bootstrap (safe to run multiple times OR convert to Job later)
+      - name: Run bootstrap in cluster
+        run: |
+          kubectl apply -f k8s/bootstrap-job.yaml
+          kubectl wait --for=condition=complete job/api-bootstrap -n sample
+
+      # 2. Deploy / update app
       - name: Deploy to Kubernetes
-        run: kubectl rollout restart deployment api -n sample
+        run: |
+          kubectl apply -f k8s/
+          kubectl rollout status deployment/api -n sample

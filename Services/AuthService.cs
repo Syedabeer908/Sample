@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Hangfire;
-using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using WebApplication1.Common.Constants;
 using WebApplication1.Common.Exceptions;
 using WebApplication1.Common.Parsers;
@@ -84,7 +84,7 @@ namespace WebApplication1.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-       
+
         private string GenerateRefreshToken()
         {
             var randomBytes = new byte[64];
@@ -105,7 +105,7 @@ namespace WebApplication1.Services
 
         private async Task<RefreshToken> CheckRefreshTokenIsValid(string token)
         {
-            if (await _redisServcie.ExistAsync("revoked", token))
+            if (await _redisServcie.ExistsAsync("revoked", token))
                 throw new BadRequestException("Invalid refresh token");
 
             var hashedToken = HashToken(token);
@@ -132,7 +132,6 @@ namespace WebApplication1.Services
         {
             var accessToken = GenerateToken(user, roleName);
             var refreshToken = GenerateRefreshToken();
-
             var entity = _mapper.ToRefreshTokenEntity(refreshToken, user.UserId);
 
             if (tokenId != null)

@@ -11,11 +11,11 @@ namespace WebApplication1.Seeders
         private readonly AppDbContext _context;
         private readonly PasswordHasher<User> _hasher;
         private readonly RoleSettings _roleSettings;
-        public DbSeeder(AppDbContext context, IOptions<RoleSettings> roleOptions)
+        public DbSeeder(AppDbContext context, RoleSettings roleOptions)
         {
             _context = context;
             _hasher = new PasswordHasher<User>();
-            _roleSettings= roleOptions.Value;
+            _roleSettings= roleOptions;
         }
         public async Task SeedAsync()
         {

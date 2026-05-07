@@ -16,21 +16,6 @@ x-common-env: &common-env
   StartUpRole__User: ${ROLE_NAME_USER}
 
 services:
- 
-  api:
-    build:
-      context: .
-    ports:
-      - "8080"
-    depends_on:
-      sql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    environment:
-      <<: *common-env
-    volumes:
-      - D:/AppStorage:/app/storage
 
   sql:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -58,3 +43,16 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  api:
+    build:
+      context: .
+    ports:
+      - "8080"
+    depends_on:
+      sql:
+        condition: service_healthy
+    environment:
+      <<: *common-env
+    volumes:
+      - D:/AppStorage:/app/storage

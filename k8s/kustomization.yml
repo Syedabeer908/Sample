@@ -6,6 +6,7 @@ resources:
 - secret.yml
 - sql.yml
 - redis.yml
+- bootstrap-job.yml
 - api.yml
 - service.yml
 - ingress.yml

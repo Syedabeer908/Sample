@@ -22,23 +22,23 @@ namespace WebApplication1.Middlewares
             }
             catch (NotFoundException ex)
             {
-                await throwException(context, 404, ex.Message);
+                await HandleExceptionAsync(context, 404, ex.Message);
             }
             catch (BadRequestException ex)
             {
-                await throwException(context, 400, ex.Message);
+                await HandleExceptionAsync(context, 400, ex.Message);
             }
             catch (ForbiddenException ex)
             {
-                await throwException(context, 403, ex.Message);
+                await HandleExceptionAsync(context, 403, ex.Message);
             }
             catch (Exception ex)
             {
-                await throwException(context, 500, $"Internal server error: {ex.ToString()}");
+                await HandleExceptionAsync(context, 500, $"Internal server error: {ex.ToString()}");
             }
         }
 
-        private async Task throwException(HttpContext context, int statusCode, string message)
+        private async Task HandleExceptionAsync(HttpContext context, int statusCode, string message)
         {
             var error = _errorHelper.CreateErrors("Exception", message);
             await ErrorResponseWriter.WriteErrorAsync(context, statusCode, error);        

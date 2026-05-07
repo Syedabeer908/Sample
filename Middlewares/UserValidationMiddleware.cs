@@ -73,7 +73,7 @@ namespace WebApplication1.Middlewares
                 return;
             }
 
-            var prefix = context.User.FindFirst(ClaimTypes.Role)?.Value ?? "User";
+            var prefix = context.User.FindFirst(ClaimTypes.Role)?.Value;
             var user = await GetUserWithCacheAsync(userId, prefix);
 
             if (user == null || !user.IsActive || user.IsDeleted)

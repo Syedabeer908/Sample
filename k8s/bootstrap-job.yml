@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-bootstrap
+  namespace: sample
+spec:
+  backoffLimit: 5
+  ttlSecondsAfterFinished: 2   
+
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: bootstrap
+        image: sample-api:latest
+        command: ["dotnet", "WebApplication1.dll", "bootstrap"]
+
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Development"
+
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: DB_CONNECTION_STRING
+
+          - name: Redis__ConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: REDIS_CONNECTION_STRING

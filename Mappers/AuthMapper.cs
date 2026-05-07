@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using WebApplication1.Common.Exceptions;
 using WebApplication1.Common.Parsers;
 using WebApplication1.DTOs;
@@ -61,7 +62,7 @@ namespace WebApplication1.Mappers
             return new AuthResponseDto
             {
                 Token = token,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
             };
         }
     }
